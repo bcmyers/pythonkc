@@ -13,5 +13,5 @@ crate-type = ["cdylib", "lib"]
 
 [[bin]]
 name = "main"
-path = "bin/main.rs"
+path = "src/bin/main.rs"
 doc = false
