@@ -1,0 +1,17 @@
+[package]
+name = "pythonkc"
+version = "0.1.0"
+authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
+
+[dependencies]
+libc = "*"
+
+[lib]
+name = "pythonkc"
+path = "src/lib.rs"
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "main"
+path = "bin/main.rs"
+doc = false
