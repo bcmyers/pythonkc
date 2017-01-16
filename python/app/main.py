@@ -30,7 +30,7 @@ def main():
     print('Single process took {:.3f} seconds.'.format(c))
     print('Multiple processes took {:.3f} seconds.'.format(d))
 
-    os.system('{}/main'.format(LIBRARY_DIR))
+    os.system('{}/pythonkc'.format(LIBRARY_DIR))
 
 
 if __name__ == '__main__':
