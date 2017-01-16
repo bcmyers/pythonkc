@@ -4,9 +4,9 @@ version = "0.1.0"
 authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
 
 [dependencies]
-libc = "*"
-rayon = "*"
-time = "*"
+libc = "0.2.19"
+rayon = "0.6.0"
+time = "0.1.36"
 
 [lib]
 name = "pythonkc"
