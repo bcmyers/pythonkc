@@ -10,7 +10,7 @@ BOUND = 2_000_000
 NPROCS = psutil.cpu_count(logical=False) + 1
 
 
-if __name__ == '__main__':
+def main():
 
     print('\nProcessing {:,d} numbers'.format(BOUND))
 
@@ -31,3 +31,7 @@ if __name__ == '__main__':
     print('Multiple processes took {:.3f} seconds.'.format(d))
 
     os.system('{}/main'.format(LIBRARY_DIR))
+
+
+if __name__ == '__main__':
+    main()

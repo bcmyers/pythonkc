@@ -24,14 +24,15 @@ class Rust:
 
     def __init__(self):
         self._ffi = cffi.FFI()
-        self._ffi.cdef(
-            'void rust_none_none();' +
-            'void rust_int_none(int);' +
-            'void rust_string_none(char*);' +
-            'int rust_none_int();' +
-            'char* rust_none_string();' +
-            'int no_of_primes(int);' +
-            'int no_of_primes_multi(int);')
+        self._ffi.cdef("""
+            int no_of_primes(int);
+            int no_of_primes_multi(int);
+            void rust_none_none();
+            void rust_int_none(int);
+            void rust_string_none(char*);
+            int rust_none_int();
+            char* rust_none_string();
+            """)
         self._lib = self._ffi.dlopen(
             os.path.join(LIBRARY_DIR, 'libpythonkc' + extension()))
 

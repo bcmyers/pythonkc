@@ -8,3 +8,5 @@ pub mod general;
 pub mod primes;
 
 pub use self::ffi::*;
+
+// TODO unit tests
