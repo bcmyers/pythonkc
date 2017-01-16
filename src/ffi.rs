@@ -26,8 +26,8 @@ pub extern "C" fn rust_int_none(arg: libc::c_int) {
 }
 
 #[no_mangle]
-pub extern "C" fn rust_string_none(arg: *const libc::c_char) {
-    let c_str: &CStr = unsafe { CStr::from_ptr(arg) };
+pub unsafe extern "C" fn rust_string_none(arg: *const libc::c_char) {
+    let c_str: &CStr = CStr::from_ptr(arg);
     let buf: &[u8] = c_str.to_bytes();
     let str_slice = str::from_utf8(buf).unwrap();
     println!("{}", str_slice);
@@ -36,4 +36,20 @@ pub extern "C" fn rust_string_none(arg: *const libc::c_char) {
 #[no_mangle]
 pub extern "C" fn rust_none_int() -> libc::c_int {
     42
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_no_of_primes() {
+        assert_eq!(no_of_primes(100_000), 9_592);
+    }
+
+    #[test]
+    fn test_no_of_primes_multi() {
+        assert_eq!(no_of_primes_multi(100_000), 9_592);
+    }
+
 }
