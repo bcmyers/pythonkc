@@ -10,11 +10,11 @@ const BOUND: usize = 2_000_000;
 fn main() {
 
     let t0 = time::now();
-    let n = no_of_primes(BOUND);
+    let _ = no_of_primes(BOUND);
     let a = (time::now() - t0).num_milliseconds() as f64 / 1_000.0;
 
     let t0 = time::now();
-    let _ = no_of_primes_multi(BOUND);
+    let n = no_of_primes_multi(BOUND);
     let b = (time::now() - t0).num_milliseconds() as f64 / 1_000.0;
 
     println!("\nRust alone:");

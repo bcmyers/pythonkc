@@ -46,11 +46,15 @@ mod tests {
 
     #[test]
     fn test_no_of_primes() {
+        assert_eq!(no_of_primes(0), 0);
+        assert_eq!(no_of_primes(1), 0);
         assert_eq!(no_of_primes(100_000), 9_592);
     }
 
     #[test]
     fn test_no_of_primes_multi() {
+        assert_eq!(no_of_primes_multi(0), 0);
+        assert_eq!(no_of_primes_multi(1), 0);
         assert_eq!(no_of_primes_multi(100_000), 9_592);
     }
 
