@@ -18,6 +18,7 @@ def no_of_primes(bound: int) -> int:
 
 
 def no_of_primes_multi(bound: int, nprocs: int) -> int:
+
     def work(chunk: Iterator[int], queue: 'multiprocessing.Queue') -> None:
         result = len([n for n in chunk if is_prime(n)])
         queue.put(result)

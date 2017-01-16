@@ -7,7 +7,10 @@ from rust import Rust, TARGET_DIR
 from timeit import timeit
 
 BOUND = 2_000_000
-NPROCS = psutil.cpu_count(logical=False) + 1
+try:
+    NPROCS = psutil.cpu_count(logical=False) + 1
+except:
+    NPROCS = 3
 
 
 def main():
