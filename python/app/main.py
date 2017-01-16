@@ -3,7 +3,7 @@ import os
 import psutil
 
 from primes import no_of_primes, no_of_primes_multi
-from rust import Rust, LIBRARY_DIR
+from rust import Rust, TARGET_DIR
 from timeit import timeit
 
 BOUND = 2_000_000
@@ -30,7 +30,8 @@ def main():
     print('Single process took {:.3f} seconds.'.format(c))
     print('Multiple processes took {:.3f} seconds.'.format(d))
 
-    os.system('{}/pythonkc'.format(LIBRARY_DIR))
+    os.system('{}'.format(os.path.join(
+        TARGET_DIR, 'release', 'pythonkc')))
 
 
 if __name__ == '__main__':

@@ -1,3 +1,5 @@
+use std::thread;
+
 use rayon::prelude::*;
 
 fn is_prime(n: usize) -> bool {
@@ -7,7 +9,7 @@ fn is_prime(n: usize) -> bool {
         return false;
     }
     let upper_bound = (n as f64).sqrt() as usize;
-    let range = (3...upper_bound).filter(|x| x % 2 == 1);
+    let range = (3..upper_bound + 1).filter(|x| x % 2 == 1);
     for i in range {
         if n % i == 0 {
             return false;
@@ -17,16 +19,34 @@ fn is_prime(n: usize) -> bool {
 }
 
 pub fn no_of_primes(bound: usize) -> usize {
-    (0...bound).filter(|&x| is_prime(x)).count()
+    (0..bound + 1).filter(|&x| is_prime(x)).count()
 }
 
 pub fn no_of_primes_multi(bound: usize) -> usize {
-    (0...bound)
+    (0..bound + 1)
         .collect::<Vec<usize>>()
         .par_iter()
         .filter(|&x| is_prime(*x))
         .count()
 }
+
+// TODO
+pub fn process() {
+    let handles: Vec<_> = (0..10)
+        .map(|_| {
+            thread::spawn(|| {
+                let mut _x = 0;
+                for _ in 0..5_000_001 {
+                    _x += 1
+                }
+            })
+        })
+        .collect();
+    for h in handles {
+        h.join().ok().expect("Could not join a thread!");
+    }
+}
+
 
 #[cfg(test)]
 mod tests {

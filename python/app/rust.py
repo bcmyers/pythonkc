@@ -5,17 +5,21 @@ from typing import Union
 import cffi
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LIBRARY_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(BASE_DIR)),
-    'target', 'release')
+TARGET_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'target')
 
 
-def extension():
-    extensions = {
-        'darwin': '.dylib',
-        'win32': '.dll',
-        'cygwin': '.dll'}
-    return extensions.get(sys.platform, '.so')
+def library(library_name: str) -> str:
+    prefix = {'win32': ''}.get(sys.platform, 'lib')
+    extension = {'darwin': '.dylib', 'win32': '.dll'}.get(sys.platform, '.so')
+    return os.path.join(
+        TARGET_DIR, 'release', prefix + library_name + extension)
+
+
+def header(library_name: str) -> str:
+    path = os.path.join(TARGET_DIR, 'release', 'lib' + library_name + '.h')
+    with open(path, 'r') as f:
+        header = f.read()
+    return header
 
 
 class Rust:
@@ -24,17 +28,8 @@ class Rust:
 
     def __init__(self):
         self._ffi = cffi.FFI()
-        self._ffi.cdef("""
-            int no_of_primes(int);
-            int no_of_primes_multi(int);
-            void rust_none_none();
-            void rust_int_none(int);
-            void rust_string_none(char*);
-            int rust_none_int();
-            char* rust_none_string();
-            """)
-        self._lib = self._ffi.dlopen(
-            os.path.join(LIBRARY_DIR, 'libpythonkc' + extension()))
+        self._ffi.cdef(header('pythonkc'))
+        self._lib = self._ffi.dlopen(library('pythonkc'))
 
     def no_of_primes(self, bound: int) -> int:
         return self._lib.no_of_primes(bound)

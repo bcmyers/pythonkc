@@ -2,11 +2,15 @@
 name = "pythonkc"
 version = "0.1.0"
 authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
+build = "build.rs"
 
 [dependencies]
 libc = "0.2.19"
 rayon = "0.6.0"
 time = "0.1.36"
+
+[build-dependencies]
+rusty-cheddar = "0.3.3"
 
 [lib]
 name = "pythonkc"
