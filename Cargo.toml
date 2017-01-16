@@ -5,6 +5,8 @@ authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
 
 [dependencies]
 libc = "*"
+rayon = "*"
+time = "*"
 
 [lib]
 name = "pythonkc"

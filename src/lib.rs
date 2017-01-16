@@ -1,7 +1,10 @@
+#![feature(inclusive_range_syntax)]
+
 extern crate libc;
+extern crate rayon;
 
 mod ffi;
-mod general;
+pub mod general;
+pub mod primes;
 
 pub use self::ffi::*;
-pub use self::general::*;
