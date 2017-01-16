@@ -1,5 +1,6 @@
 use std::thread;
 
+use num_cpus;
 use rayon::prelude::*;
 
 fn is_prime(n: usize) -> bool {
@@ -32,7 +33,8 @@ pub fn no_of_primes_multi(bound: usize) -> usize {
 
 // TODO
 pub fn process() {
-    let handles: Vec<_> = (0..10)
+    let nprocs = num_cpus::get_physical() + 1;
+    let handles: Vec<_> = (0..nprocs)
         .map(|_| {
             thread::spawn(|| {
                 let mut _x = 0;
