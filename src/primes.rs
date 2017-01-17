@@ -1,5 +1,6 @@
 use std::sync::mpsc::channel;
 use std::thread;
+use std::thread::JoinHandle;
 
 use rayon::prelude::*;
 
@@ -33,7 +34,7 @@ pub fn no_of_primes_magic(bound: usize) -> usize {
 
 pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
     let (tx, rx) = channel();
-    let handles: Vec<_> = (0..nprocs)
+    let handles: Vec<JoinHandle<_>> = (0..nprocs)
         .map(|i| {
             let (i, tx) = (i.clone(), tx.clone());
             thread::spawn(move || {
