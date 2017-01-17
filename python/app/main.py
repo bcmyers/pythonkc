@@ -6,11 +6,11 @@ from primes import no_of_primes, no_of_primes_magic, no_of_primes_multi
 from rust import Rust, TARGET_DIR
 from timeit import timeit
 
-BOUND = 5_000_000
+BOUND = 3_000_000
 try:
-    NPROCS = (psutil.cpu_count(logical=False) + 1) * 2
+    NPROCS = psutil.cpu_count(logical=False) + 1
 except:
-    NPROCS = 6
+    NPROCS = 3
 
 
 def main():

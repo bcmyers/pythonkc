@@ -24,6 +24,6 @@ path = "src/bin/primes.rs"
 doc = false
 
 [[bin]]
-name = "hello"
-path = "src/bin/hello.rs"
+name = "tmp"
+path = "src/bin/tmp.rs"
 doc = false
