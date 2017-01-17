@@ -43,10 +43,9 @@ pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
             })
         })
         .collect();
-    handles.map(|handle| handle.join());
-    // for handle in handles {
-    //     let _ = handle.join();
-    // }
+    for handle in handles {
+        let _ = handle.join();
+    }
     let mut results: Vec<_> = Vec::with_capacity(nprocs);
     for _ in 0..nprocs {
         results.push(rx.recv().unwrap());
