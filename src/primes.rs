@@ -35,12 +35,11 @@ pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
     let (tx, rx) = channel();
     let handles: Vec<_> = (0..nprocs)
         .map(|i| {
-            let i = i.clone();
-            let thread_tx = tx.clone();
+            let (i, tx) = (i.clone(), tx.clone());
             thread::spawn(move || {
                 let chunk = (i..bound + 1).step_by(nprocs);
                 let result = chunk.filter(|&x| is_prime(x)).count();
-                thread_tx.send(result).unwrap();
+                tx.send(result).unwrap();
             })
         })
         .collect();
