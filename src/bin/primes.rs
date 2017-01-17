@@ -15,7 +15,7 @@ fn main() {
         .parse::<usize>()
         .expect("Must enter a valid bound");
 
-    println!("\nRust alone:");
+    println!("Rust alone:");
     let t0 = time::now();
     let _ = no_of_primes(bound);
     let t1 = (time::now() - t0).num_milliseconds() as f64 / 1_000.0;

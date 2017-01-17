@@ -1,3 +1,4 @@
+use std::sync::mpsc::channel;
 use std::thread;
 
 use rayon::prelude::*;
@@ -31,27 +32,24 @@ pub fn no_of_primes_magic(bound: usize) -> usize {
 }
 
 pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
-    let mut threads = Vec::new();
-    for i in 0..nprocs {
-        let chunk = (i..bound + 1).step_by(nprocs);
-        let thread = thread::spawn(move || {
-            let mut v: Vec<usize> = Vec::new();
-            for j in chunk {
-                let u: usize = match is_prime(j) {
-                    false => 0,
-                    true => 1,
-                };
-                v.push(u);
-            }
-            v.iter().sum()
-        });
-        threads.push(thread);
+    let (tx, rx) = channel();
+    let handles: Vec<_> = (0..nprocs)
+        .map(|i| {
+            let i = i.clone();
+            let thread_tx = tx.clone();
+            thread::spawn(move || {
+                let chunk = (i..bound + 1).step_by(nprocs);
+                let result = chunk.filter(|&x| is_prime(x)).count();
+                thread_tx.send(result).unwrap();
+            })
+        })
+        .collect();
+    for handle in handles {
+        let _ = handle.join();
     }
-
-    let mut results: Vec<usize> = Vec::new();
-    for thread in threads {
-        let result = thread.join().ok().expect("Could not join a process!");
-        results.push(result);
+    let mut results: Vec<_> = Vec::with_capacity(nprocs);
+    for _ in 0..nprocs {
+        results.push(rx.recv().unwrap());
     }
     results.iter().sum()
 }

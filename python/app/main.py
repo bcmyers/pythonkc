@@ -32,11 +32,10 @@ def main():
     t5 = timeit(rust.no_of_primes_magic, {'bound': BOUND})
     print("'Magic' multiprocessing took {:.3f} seconds.".format(t5))
     t6 = timeit(rust.no_of_primes_multi, {'bound': BOUND, 'nprocs': 10})
-    print("'Manual' multiprocessing took {:.3f} seconds.".format(t6))
+    print("'Manual' multiprocessing took {:.3f} seconds.\n".format(t6))
 
     os.system('{} {}'.format(
-        os.path.join(TARGET_DIR, 'release', 'primes'),
-        BOUND))
+        os.path.join(TARGET_DIR, 'release', 'primes'), BOUND))
 
 
 if __name__ == '__main__':
