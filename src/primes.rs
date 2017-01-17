@@ -1,6 +1,5 @@
 use std::thread;
 
-use num_cpus;
 use rayon::prelude::*;
 
 fn is_prime(n: usize) -> bool {
@@ -23,7 +22,7 @@ pub fn no_of_primes(bound: usize) -> usize {
     (0..bound + 1).filter(|&x| is_prime(x)).count()
 }
 
-pub fn no_of_primes_multi(bound: usize) -> usize {
+pub fn no_of_primes_magic(bound: usize) -> usize {
     (0..bound + 1)
         .collect::<Vec<usize>>()
         .par_iter()
@@ -31,24 +30,31 @@ pub fn no_of_primes_multi(bound: usize) -> usize {
         .count()
 }
 
-// TODO
-pub fn process() {
-    let nprocs = num_cpus::get_physical() + 1;
-    let handles: Vec<_> = (0..nprocs)
-        .map(|_| {
-            thread::spawn(|| {
-                let mut _x = 0;
-                for _ in 0..5_000_001 {
-                    _x += 1
-                }
-            })
-        })
-        .collect();
-    for h in handles {
-        h.join().ok().expect("Could not join a thread!");
+pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
+    let mut threads = Vec::new();
+    for i in 0..nprocs {
+        let chunk = (i..bound + 1).step_by(nprocs);
+        let thread = thread::spawn(move || {
+            let mut v: Vec<usize> = Vec::new();
+            for j in chunk {
+                let u: usize = match is_prime(j) {
+                    false => 0,
+                    true => 1,
+                };
+                v.push(u);
+            }
+            v.iter().sum()
+        });
+        threads.push(thread);
     }
-}
 
+    let mut results: Vec<usize> = Vec::new();
+    for thread in threads {
+        let result = thread.join().ok().expect("Could not join a process!");
+        results.push(result);
+    }
+    results.iter().sum()
+}
 
 #[cfg(test)]
 mod tests {
@@ -70,14 +76,23 @@ mod tests {
     fn test_no_of_primes() {
         assert_eq!(no_of_primes(0), 0);
         assert_eq!(no_of_primes(1), 0);
+        assert_eq!(no_of_primes(2), 1);
         assert_eq!(no_of_primes(100_000), 9_592);
     }
 
     #[test]
-    fn test_no_of_primes_multi() {
-        assert_eq!(no_of_primes_multi(0), 0);
-        assert_eq!(no_of_primes_multi(1), 0);
-        assert_eq!(no_of_primes_multi(100_000), 9_592);
+    fn test_no_of_primes_magic() {
+        assert_eq!(no_of_primes_magic(0), 0);
+        assert_eq!(no_of_primes_magic(1), 0);
+        assert_eq!(no_of_primes_magic(2), 1);
+        assert_eq!(no_of_primes_magic(100_000), 9_592);
     }
 
+    #[test]
+    fn test_no_of_primes_multi() {
+        assert_eq!(no_of_primes_multi(0, 3), 0);
+        assert_eq!(no_of_primes_multi(1, 3), 0);
+        assert_eq!(no_of_primes_multi(2, 3), 1);
+        assert_eq!(no_of_primes_multi(100_000, 3), 9_592);
+    }
 }

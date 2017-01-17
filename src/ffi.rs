@@ -11,8 +11,15 @@ pub extern "C" fn no_of_primes(bound: libc::uint64_t) -> libc::uint64_t {
 }
 
 #[no_mangle]
-pub extern "C" fn no_of_primes_multi(bound: libc::uint64_t) -> libc::uint64_t {
-    primes::no_of_primes_multi(bound as usize) as u64
+pub extern "C" fn no_of_primes_magic(bound: libc::uint64_t) -> libc::uint64_t {
+    primes::no_of_primes_magic(bound as usize) as u64
+}
+
+#[no_mangle]
+pub extern "C" fn no_of_primes_multi(bound: libc::uint64_t,
+                                     nprocs: libc::uint64_t)
+                                     -> libc::uint64_t {
+    primes::no_of_primes_multi(bound as usize, nprocs as usize) as u64
 }
 
 #[no_mangle]
@@ -46,14 +53,24 @@ mod tests {
     fn test_no_of_primes() {
         assert_eq!(no_of_primes(0), 0);
         assert_eq!(no_of_primes(1), 0);
+        assert_eq!(no_of_primes(2), 1);
         assert_eq!(no_of_primes(100_000), 9_592);
     }
 
     #[test]
+    fn test_no_of_primes_magic() {
+        assert_eq!(no_of_primes_magic(0), 0);
+        assert_eq!(no_of_primes_magic(1), 0);
+        assert_eq!(no_of_primes_magic(2), 1);
+        assert_eq!(no_of_primes_magic(100_000), 9_592);
+    }
+
+    #[test]
     fn test_no_of_primes_multi() {
-        assert_eq!(no_of_primes_multi(0), 0);
-        assert_eq!(no_of_primes_multi(1), 0);
-        assert_eq!(no_of_primes_multi(100_000), 9_592);
+        assert_eq!(no_of_primes_multi(0, 3), 0);
+        assert_eq!(no_of_primes_multi(1, 3), 0);
+        assert_eq!(no_of_primes_multi(2, 3), 1);
+        assert_eq!(no_of_primes_multi(100_000, 3), 9_592);
     }
 
 }

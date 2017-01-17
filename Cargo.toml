@@ -19,6 +19,11 @@ path = "src/lib.rs"
 crate-type = ["cdylib", "lib"]
 
 [[bin]]
-name = "pythonkc"
-path = "src/bin/main.rs"
+name = "primes"
+path = "src/bin/primes.rs"
+doc = false
+
+[[bin]]
+name = "hello"
+path = "src/bin/hello.rs"
 doc = false

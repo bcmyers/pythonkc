@@ -14,34 +14,33 @@ def is_prime(n: int) -> bool:
 
 
 def no_of_primes(bound: int) -> int:
-    return len([n for n in range(0, bound + 1) if is_prime(n)])
+    nums = range(0, bound + 1)
+    return len([n for n in nums if is_prime(n)])
+
+
+def no_of_primes_magic(bound: int) -> int:
+    nums = range(0, bound + 1)
+    pool = multiprocessing.Pool()
+    result = pool.map(is_prime, nums)
+    return sum(result)
 
 
 def no_of_primes_multi(bound: int, nprocs: int) -> int:
+    nums = range(0, bound + 1)
+    chunks = [nums[i::nprocs] for i in range(nprocs)]
 
-    def work(chunk: Iterator[int], queue: 'multiprocessing.Queue') -> None:
+    def worker(chunk: Iterator[int], queue: 'multiprocessing.Queue') -> None:
         result = len([n for n in chunk if is_prime(n)])
         queue.put(result)
 
-    def generate_chunks(iterator, items_per_chunk):
-        for i in range(0, len(iterator), items_per_chunk):
-            yield iterator[i:i + items_per_chunk]
-
-    chunks = list(generate_chunks(range(0, bound + 1), bound // nprocs + 1))
-
     queue = multiprocessing.Queue()
-
-    for i in range(nprocs):
-        p = multiprocessing.Process(
-                target=work,
-                args=(chunks[i], queue))
-        p.start()
-
-    answer = 0
-    for i in range(nprocs):
-        answer += queue.get()
-
-    for i in range(nprocs):
-        p.join()
-
+    processes = [
+        multiprocessing.Process(target=worker, args=(chunks[i], queue))
+        for i in range(nprocs)
+    ]
+    for process in processes:
+        process.start()
+    for process in processes:
+        process.join()
+    answer = sum([queue.get() for process in processes])
     return answer

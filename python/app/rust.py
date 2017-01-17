@@ -4,8 +4,8 @@ from typing import Union
 
 import cffi
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TARGET_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'target')
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+TARGET_DIR = os.path.join(os.path.dirname(os.path.dirname(FILE_DIR)), 'target')
 
 
 def library(library_name: str) -> str:
@@ -34,8 +34,11 @@ class Rust:
     def no_of_primes(self, bound: int) -> int:
         return self._lib.no_of_primes(bound)
 
-    def no_of_primes_multi(self, bound: int) -> int:
-        return self._lib.no_of_primes_multi(bound)
+    def no_of_primes_magic(self, bound: int) -> int:
+        return self._lib.no_of_primes_magic(bound)
+
+    def no_of_primes_multi(self, bound: int, nprocs: int) -> int:
+        return self._lib.no_of_primes_multi(bound, nprocs)
 
     def rust_none_none(self) -> None:
         self._lib.rust_none_none()
