@@ -2,9 +2,9 @@ import os
 
 import psutil
 
-from primes import no_of_primes, no_of_primes_magic, no_of_primes_multi
-from rust import Rust, TARGET_DIR
-from timeit import timeit
+from .primes import no_of_primes, no_of_primes_magic, no_of_primes_multi
+from .rust import Rust, TARGET_DIR
+from .timeit import timeit
 
 BOUND = 3_000_000
 try:

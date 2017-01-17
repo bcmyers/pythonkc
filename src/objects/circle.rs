@@ -16,20 +16,20 @@ impl Circle {
             radius: radius.into(),
         }
     }
-    pub fn get_circumference(&self) -> f64 {
+    pub fn circumference(&self) -> f64 {
         2f64 * PI * self.radius
+    }
+    pub fn diameter(&self) -> f64 {
+        2f64 * self.radius
+    }
+    pub fn radius(&self) -> f64 {
+        self.radius
     }
     pub fn set_circumference<T: Into<f64> + Copy>(&mut self, circumference: T) {
         self.radius = circumference.into() / (2f64 * PI)
     }
-    pub fn get_diameter(&self) -> f64 {
-        2f64 * self.radius
-    }
     pub fn set_diamenter<T: Into<f64> + Copy>(&mut self, diameter: T) {
         self.radius = (diameter.into() / PI).sqrt();
-    }
-    pub fn get_radius(&self) -> f64 {
-        self.radius
     }
     pub fn set_radius<T: Into<f64> + Copy>(&mut self, radius: T) {
         self.radius = radius.into();
@@ -37,14 +37,14 @@ impl Circle {
 }
 
 impl Shape for Circle {
-    fn get_area(&self) -> f64 {
+    fn area(&self) -> f64 {
         PI * self.radius.powi(2)
+    }
+    fn color(&self) -> Color {
+        self.color
     }
     fn set_area<T: Into<f64> + Copy>(&mut self, area: T) {
         self.radius = (area.into() / PI).sqrt();
-    }
-    fn get_color(&self) -> Color {
-        self.color
     }
     fn set_color(&mut self, color: Color) {
         self.color = color;
@@ -58,10 +58,10 @@ mod tests {
     #[test]
     fn test_new() {
         let circle = Circle::new(5u8);
-        assert_eq!(circle.get_area(), PI * 5f64.powi(2));
-        assert_eq!(circle.get_color(), Color::new(255, 255, 255));
-        assert_eq!(circle.get_circumference(), 2f64 * PI * 5f64);
-        assert_eq!(circle.get_diameter(), 2f64 * 5f64);
-        assert_eq!(circle.get_radius(), 5f64);
+        assert_eq!(circle.area(), PI * 5f64.powi(2));
+        assert_eq!(circle.color(), Color::new(255, 255, 255));
+        assert_eq!(circle.circumference(), 2f64 * PI * 5f64);
+        assert_eq!(circle.diameter(), 2f64 * 5f64);
+        assert_eq!(circle.radius(), 5f64);
     }
 }

@@ -1,2 +1,3 @@
 cffi
+jupyter
 psutil

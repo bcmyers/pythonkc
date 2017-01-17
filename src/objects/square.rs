@@ -16,7 +16,7 @@ impl Square {
             side: side.into(),
         }
     }
-    pub fn get_side(&self) -> f64 {
+    pub fn side(&self) -> f64 {
         self.side
     }
     pub fn set_side<T: Into<f64> + Copy>(&mut self, side: T) {
@@ -26,15 +26,15 @@ impl Square {
 }
 
 impl Shape for Square {
-    fn get_area(&self) -> f64 {
+    fn area(&self) -> f64 {
         self.side.powi(2)
+    }
+    fn color(&self) -> Color {
+        self.color
     }
     fn set_area<T: Into<f64> + Copy>(&mut self, area: T) {
         self.area = area.into();
         self.side = area.into().sqrt();
-    }
-    fn get_color(&self) -> Color {
-        self.color
     }
     fn set_color(&mut self, color: Color) {
         self.color = color;
