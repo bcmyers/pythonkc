@@ -24,7 +24,7 @@ class Rust:
 
     __slots__ = ('_ffi', '_lib')
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._ffi = cffi.FFI()
         self._ffi.cdef(header('pythonkc'))
         self._lib = self._ffi.dlopen(library('pythonkc'))

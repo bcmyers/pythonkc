@@ -16,7 +16,7 @@ DEFAULT_BOUND = 2_000_000
 DEFAULT_NPROCS = psutil.cpu_count(logical=False) + 1
 
 
-def parse_args(args):
+def parse_args(args: str) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             'Calculates the numer of prime numbers below a given bound.'

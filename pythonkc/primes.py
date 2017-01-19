@@ -1,5 +1,5 @@
 import multiprocessing
-from typing import Iterator, Optional  # noqa: F401
+from typing import Iterator
 
 
 def is_prime(n: int) -> bool:
@@ -29,7 +29,7 @@ def no_of_primes_multi(bound: int, nprocs: int) -> int:
     nums = range(0, bound + 1)
     chunks = [nums[i::nprocs] for i in range(nprocs)]
 
-    def worker(chunk: Iterator[int], queue: 'multiprocessing.Queue') -> None:
+    def worker(chunk: Iterator[int], queue: multiprocessing.Queue) -> None:
         result = len([n for n in chunk if is_prime(n)])
         queue.put(result)
 
