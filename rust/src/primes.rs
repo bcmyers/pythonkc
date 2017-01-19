@@ -33,7 +33,7 @@ pub fn no_of_primes_magic(bound: usize) -> usize {
 
 pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
     let (tx, rx) = channel();
-    let handles = (0..nprocs)
+    let handles: Vec<_> = (0..nprocs)
         .map(|i| {
             let tx = tx.clone();
             thread::spawn(move || {
@@ -42,10 +42,14 @@ pub fn no_of_primes_multi(bound: usize, nprocs: usize) -> usize {
                 tx.send(result).unwrap();
             })
         })
-        .collect::<Vec<_>>();
-    handles.into_iter().map(|handle| handle.join()).collect::<Vec<_>>();
-    let mut results: Vec<_> = Vec::with_capacity(nprocs);
-    (0..nprocs).map(|_| { results.push(rx.recv().unwrap()); }).collect::<Vec<_>>();
+        .collect();
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    let mut results: Vec<usize> = Vec::with_capacity(nprocs);
+    for _ in 0..nprocs {
+        results.push(rx.recv().unwrap());
+    }
     results.iter().sum()
 }
 
