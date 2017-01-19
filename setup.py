@@ -2,7 +2,7 @@ import os
 from pip.req import parse_requirements
 from setuptools import find_packages, setup
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+from config import BASE_DIR
 
 
 def long_description():
@@ -24,20 +24,19 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 3.6',
     ],
     entry_points={
-        'console_scripts': ['pythonkc = scripts.main:main']
+        'console_scripts': ['pythonkc = pythonkc.scripts.main:main']
     },
     description='Template for calling Rust from Python',
     keywords='rust',
     license='MIT',
     name='pythonkc',
-    packages=find_packages(exclude=[]),
+    packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
     test_suite='tests',
     url='https://www.github.com/bcmyers/pythonkc',
     version='0.1.0',
