@@ -4,19 +4,17 @@ from typing import Union
 
 import cffi
 
-FILE_DIR = os.path.dirname(os.path.abspath(__file__))
-TARGET_DIR = os.path.join(os.path.dirname(os.path.dirname(FILE_DIR)), 'target')
+from config import RUST_DIR
 
 
 def library(library_name: str) -> str:
     prefix = {'win32': ''}.get(sys.platform, 'lib')
     extension = {'darwin': '.dylib', 'win32': '.dll'}.get(sys.platform, '.so')
-    return os.path.join(
-        TARGET_DIR, 'release', prefix + library_name + extension)
+    return os.path.join(RUST_DIR, prefix + library_name + extension)
 
 
 def header(library_name: str) -> str:
-    path = os.path.join(TARGET_DIR, 'release', 'lib' + library_name + '.h')
+    path = os.path.join(RUST_DIR, 'lib' + library_name + '.h')
     with open(path, 'r') as f:
         header = f.read()
     return header

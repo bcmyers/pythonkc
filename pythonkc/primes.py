@@ -1,5 +1,5 @@
 import multiprocessing
-from typing import Iterator, Optional  # noqa
+from typing import Iterator, Optional  # noqa: F401
 
 
 def is_prime(n: int) -> bool:
