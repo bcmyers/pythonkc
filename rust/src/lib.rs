@@ -5,7 +5,10 @@
 
 #![feature(step_by)]
 
+extern crate env_logger;
 extern crate libc;
+#[macro_use]
+extern crate log;
 extern crate rayon;
 
 mod ffi;

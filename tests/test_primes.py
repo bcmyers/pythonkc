@@ -1,6 +1,7 @@
 import unittest
 
 from pythonkc.primes import (
+    is_prime,
     no_of_primes,
     no_of_primes_magic,
     no_of_primes_multi,
@@ -8,6 +9,10 @@ from pythonkc.primes import (
 
 
 class TestPrimes(unittest.TestCase):
+
+    def is_prime(self):
+        self.assertTrue(is_prime(101))
+        self.assertTrue(not is_prime(25))
 
     def test_no_of_primes(self):
         self.assertEqual(no_of_primes(0), 0)

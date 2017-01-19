@@ -5,10 +5,13 @@ authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
 build = "build.rs"
 
 [dependencies]
-libc = "0.2.19"
-num_cpus = "1.2.1"
-rayon = "0.6.0"
-time = "0.1.36"
+clap = "*"
+env_logger = "*"
+libc = "*"
+log = "*"
+num_cpus = "*"
+rayon = "*"
+time = "*"
 
 [build-dependencies]
 rusty-cheddar = "0.3.3"
