@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![cfg_attr(feature = "cargo-clippy", allow(unused_collect))]
 // TODO benchmarks
 // TODO docs
 // TODO passing complex types

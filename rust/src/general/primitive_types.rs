@@ -1,4 +1,5 @@
 #[allow(unused_variables)]
+#[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
 pub fn primitive_types() {
 
     // Booleans
