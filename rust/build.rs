@@ -1,7 +1,7 @@
 extern crate cheddar;
 
 use std::fs;
-use std::fs::File;
+use std::fs::{copy, File};
 use std::io::Write;
 
 fn main() {
@@ -11,10 +11,7 @@ fn main() {
         .expect("malformed module path")
         .compile_code()
         .expect("could not compile code");
-    for directory in ["debug", "release"].iter() {
-        fs::create_dir_all(format!("target/{}", directory)).unwrap();
-        let mut file = File::create(format!("target/{}/libpythonkc.h", directory))
-            .expect("unable to create file");
-        file.write_all(header.as_bytes()).expect("unable to write data");
-    }
+    fs::create_dir_all("../data").unwrap();
+    let mut file = File::create("../data/pythonkc.h").expect("unable to create file");
+    file.write_all(header.as_bytes()).expect("unable to write data");
 }

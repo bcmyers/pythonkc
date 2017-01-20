@@ -1,8 +1,4 @@
 -r production.txt
-coverage
 flake8
-jupyter
 mypy
-pytest
-rust-ext
 wheel

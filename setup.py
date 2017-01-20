@@ -2,7 +2,13 @@ import os
 from pip.req import parse_requirements
 from setuptools import find_packages, setup
 
-from config import BASE_DIR
+from rustypy import RustyModule, RustySetup
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RUST_DIR = os.path.join(BASE_DIR, 'rust')
+
+rusty_module = RustyModule('pythonkc')
+rusty_setup = RustySetup(rusty_module, RUST_DIR)
 
 
 def long_description():
@@ -30,7 +36,10 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     entry_points={
-        'console_scripts': ['pythonkc = pythonkc.scripts.main:main']
+        'console_scripts': [
+            'pythonkc = pythonkc.bin.pythonkc:main',
+            'rustypy = pythonkc.bin.rustypy:main'
+        ]
     },
     description='Template for calling Rust from Python',
     keywords='rust',
@@ -42,4 +51,8 @@ setup(
     version='0.1.0',
     install_requires=requirements(),
     long_description=long_description(),
+
+    # Rust
+    data_files=[rusty_setup.data_files],
+    zip_safe=False,
 )

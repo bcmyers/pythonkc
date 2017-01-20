@@ -11,9 +11,8 @@ extern crate libc;
 extern crate log;
 extern crate rayon;
 
-mod ffi;
+pub mod ffi;
 pub mod general;
 mod objects;
-pub mod primes;
 
 pub use ffi::*;

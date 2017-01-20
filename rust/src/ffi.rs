@@ -1,49 +1,63 @@
-use std::ffi::CStr;
-use std::str;
+use std::sync::mpsc::channel;
+use std::thread;
 
 use libc;
+use rayon::prelude::*;
 
-use primes;
+fn is_prime(n: u32) -> bool {
+    if (n == 2) | (n == 3) {
+        return true;
+    } else if (n % 2 == 0) | (n < 2) {
+        return false;
+    }
+    let upper_bound = (n as f64).sqrt() as u32;
+    let range = (3..upper_bound + 1).filter(|x| x % 2 == 1);
+    for i in range {
+        if n % i == 0 {
+            return false;
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn no_of_primes(bound: libc::uint64_t) -> libc::uint64_t {
-    primes::no_of_primes(bound as usize) as u64
+    true
 }
 
 #[no_mangle]
-pub extern "C" fn no_of_primes_magic(bound: libc::uint64_t) -> libc::uint64_t {
-    primes::no_of_primes_magic(bound as usize) as u64
+pub extern "C" fn primes(bound: libc::c_uint) -> libc::c_uint {
+    (0..bound + 1).filter(|&x| is_prime(x)).count() as u32
 }
 
 #[no_mangle]
-pub extern "C" fn no_of_primes_multi(bound: libc::uint64_t,
-                                     nprocs: libc::uint64_t)
-                                     -> libc::uint64_t {
-    primes::no_of_primes_multi(bound as usize, nprocs as usize) as u64
+pub extern "C" fn primes_magic(bound: libc::c_uint) -> libc::c_uint {
+    (0..bound + 1)
+        .collect::<Vec<u32>>()
+        .par_iter()
+        .filter(|&x| is_prime(*x))
+        .count() as u32
 }
 
 #[no_mangle]
-pub extern "C" fn rust_none_none() {
-    println!("💩");
+pub extern "C" fn primes_multi(bound: libc::c_uint, nprocs: libc::c_uint) -> libc::c_uint {
+    let (tx, rx) = channel();
+    let handles: Vec<_> = (0..nprocs)
+        .map(|i| {
+            let tx = tx.clone();
+            thread::spawn(move || {
+                let chunk = (i..bound + 1).step_by(nprocs);
+                let result = chunk.filter(|&x| is_prime(x)).count() as u32;
+                tx.send(result).unwrap();
+            })
+        })
+        .collect();
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    let mut results: Vec<u32> = Vec::with_capacity(nprocs as usize);
+    for _ in 0..nprocs {
+        results.push(rx.recv().unwrap());
+    }
+    results.iter().sum()
 }
 
-#[no_mangle]
-pub extern "C" fn rust_int_none(arg: libc::c_int) {
-    println!("{}", arg);
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rust_string_none(arg: *const libc::c_char) {
-    let c_str: &CStr = CStr::from_ptr(arg);
-    let buf: &[u8] = c_str.to_bytes();
-    let str_slice = str::from_utf8(buf).unwrap();
-    println!("{}", str_slice);
-}
-
-#[no_mangle]
-pub extern "C" fn rust_none_int() -> libc::c_int {
-    42
-}
 
 #[cfg(test)]
 mod tests {
@@ -51,26 +65,26 @@ mod tests {
 
     #[test]
     fn test_no_of_primes() {
-        assert_eq!(no_of_primes(0), 0);
-        assert_eq!(no_of_primes(1), 0);
-        assert_eq!(no_of_primes(2), 1);
-        assert_eq!(no_of_primes(100_000), 9_592);
+        assert_eq!(primes(0), 0);
+        assert_eq!(primes(1), 0);
+        assert_eq!(primes(2), 1);
+        assert_eq!(primes(100_000), 9_592);
     }
 
     #[test]
     fn test_no_of_primes_magic() {
-        assert_eq!(no_of_primes_magic(0), 0);
-        assert_eq!(no_of_primes_magic(1), 0);
-        assert_eq!(no_of_primes_magic(2), 1);
-        assert_eq!(no_of_primes_magic(100_000), 9_592);
+        assert_eq!(primes_magic(0), 0);
+        assert_eq!(primes_magic(1), 0);
+        assert_eq!(primes_magic(2), 1);
+        assert_eq!(primes_magic(100_000), 9_592);
     }
 
     #[test]
     fn test_no_of_primes_multi() {
-        assert_eq!(no_of_primes_multi(0, 3), 0);
-        assert_eq!(no_of_primes_multi(1, 3), 0);
-        assert_eq!(no_of_primes_multi(2, 3), 1);
-        assert_eq!(no_of_primes_multi(100_000, 3), 9_592);
+        assert_eq!(primes_multi(0, 3), 0);
+        assert_eq!(primes_multi(1, 3), 0);
+        assert_eq!(primes_multi(2, 3), 1);
+        assert_eq!(primes_multi(100_000, 3), 9_592);
     }
 
 }

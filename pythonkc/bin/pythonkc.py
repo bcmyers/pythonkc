@@ -1,15 +1,15 @@
 import argparse
-import os
 import sys
 
 import psutil
+from rustypy import RustyModule
 
 from pythonkc import (
-    no_of_primes,
-    no_of_primes_magic,
-    no_of_primes_multi,
+    primes,
+    primes_magic,
+    primes_multi,
+    Rust,
 )
-from pythonkc.rust import Rust, RUST_DIR
 from pythonkc.timeit import timeit
 
 DEFAULT_BOUND = 2_000_000
@@ -48,21 +48,27 @@ def main():
     args = parse_args(sys.argv[1:])
     print('\nHow many prime numbers are there below {:,d}?'.format(args.bound))
     print('\nPython:')
-    t1 = timeit(no_of_primes, {'bound': args.bound})
+    t1, np = timeit(primes, {'bound': args.bound})
     print('Single process took {:.3f} seconds.'.format(t1))
-    t2 = timeit(no_of_primes_magic, {'bound': args.bound})
+    t2, np = timeit(primes_magic, {'bound': args.bound})
     print("'Magic' multiprocessing took {:.3f} seconds.".format(t2))
-    t3 = timeit(no_of_primes_multi, {'bound': args.bound, 'nprocs': args.nprocs})  # noqa: E501
+    t3, np = timeit(primes_multi, {'bound': args.bound, 'nprocs': args.nprocs})
     print("'Manual' multiprocessing took {:.3f} seconds.".format(t3))
-    rust = Rust()
+    rusty_module = RustyModule('pythonkc')
+    rust = Rust(rusty_module)
     print('\nRust called from Python:')
-    t4 = timeit(rust.no_of_primes, {'bound': args.bound})
+    t4, np = timeit(rust.primes, {'bound': args.bound})
     print('Single process took {:.3f} seconds.'.format(t4))
-    t5 = timeit(rust.no_of_primes_magic, {'bound': args.bound})
+    t5, np = timeit(rust.primes_magic, {'bound': args.bound})
     print("'Magic' multiprocessing took {:.3f} seconds.".format(t5))
-    t6 = timeit(rust.no_of_primes_multi, {'bound': args.bound, 'nprocs': 10})
+    t6, np = timeit(rust.primes_multi, {'bound': args.bound, 'nprocs': 10})
     print("'Manual' multiprocessing took {:.3f} seconds.\n".format(t6))
-    os.system('{} {}'.format(os.path.join(RUST_DIR, 'primes'), args.bound))
+    print('In case you were curious...')
+    percentage = np / args.bound * 100
+    print((
+        'There are {:,d} primes below {:,d} ({:.1f}%)\n'
+        .format(np, args.bound, percentage)
+    ))
 
 
 if __name__ == '__main__':
