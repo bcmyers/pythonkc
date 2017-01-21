@@ -2,7 +2,12 @@ import os
 from pip.req import parse_requirements
 from setuptools import find_packages, setup
 
-from rustypy import build_rust, install_with_rust, RustyModule
+from rustypy import (
+    build_rust,
+    develop_with_rust,
+    install_lib_with_rust,
+    RustyModule
+)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -52,14 +57,14 @@ setup(
     # rustypy
     cmdclass={
         'build_rust': build_rust,
-        'install_lib': install_with_rust,
+        'develop': develop_with_rust,
+        'install_lib': install_lib_with_rust,
     },
     options={
         'build_rust': {
             'modules': [
                 RustyModule('rusty_primes', os.path.join(BASE_DIR, 'rust')),
             ],
-            # 'release': True,
         }
     },
     zip_safe=False,
