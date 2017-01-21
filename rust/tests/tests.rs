@@ -1,6 +1,6 @@
-extern crate pythonkc;
+extern crate rusty_primes;
 
-use pythonkc::{primes, primes_magic, primes_multi};
+use rusty_primes::{primes, primes_magic, primes_multi};
 
 #[test]
 fn test_ffi() {

@@ -1,6 +1,0 @@
-.coverage
-*.egg-info
-build/
-data/
-dist/
-target/

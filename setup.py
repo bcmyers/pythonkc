@@ -2,13 +2,9 @@ import os
 from pip.req import parse_requirements
 from setuptools import find_packages, setup
 
-from rustypy import RustyModule, RustySetup
+from rustypy import build_rust, install_with_rust, RustyModule
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-RUST_DIR = os.path.join(BASE_DIR, 'rust')
-
-rusty_module = RustyModule('pythonkc')
-rusty_setup = RustySetup(rusty_module, RUST_DIR)
 
 
 def long_description():
@@ -37,22 +33,34 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'pythonkc = pythonkc.bin.pythonkc:main',
+            'rust1 = pythonkc.bin.rust1:main',
+            'rust2 = pythonkc.bin.rust2:main',
             'rustypy = pythonkc.bin.rustypy:main'
         ]
     },
     description='Template for calling Rust from Python',
+    install_requires=requirements(),
     keywords='rust',
     license='MIT',
+    long_description=long_description(),
     name='pythonkc',
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
     test_suite='tests',
     url='https://www.github.com/bcmyers/pythonkc',
     version='0.1.0',
-    install_requires=requirements(),
-    long_description=long_description(),
 
-    # Rust
-    data_files=[rusty_setup.data_files],
+    # rustypy
+    cmdclass={
+        'build_rust': build_rust,
+        'install_lib': install_with_rust,
+    },
+    options={
+        'build_rust': {
+            'modules': [
+                RustyModule('rusty_primes', os.path.join(BASE_DIR, 'rust')),
+            ],
+            # 'release': True,
+        }
+    },
     zip_safe=False,
 )

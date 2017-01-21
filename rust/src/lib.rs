@@ -5,14 +5,16 @@
 
 #![feature(step_by)]
 
-extern crate env_logger;
-extern crate libc;
 #[macro_use]
-extern crate log;
+extern crate cpython;
+extern crate libc;
 extern crate rayon;
 
-pub mod ffi;
+// mod ffi;
+mod ffi2;
 pub mod general;
 mod objects;
+mod primes;
 
-pub use ffi::*;
+// pub use ffi::*;
+pub use ffi2::*;

@@ -1,9 +1,7 @@
 use std::sync::mpsc::channel;
 use std::thread;
 
-use libc;
 use rayon::prelude::*;
-
 
 fn is_prime(n: u32) -> bool {
     if (n == 2) | (n == 3) {
@@ -18,17 +16,14 @@ fn is_prime(n: u32) -> bool {
             return false;
         }
     }
-
     true
 }
 
-#[no_mangle]
-pub extern "C" fn primes(bound: libc::c_uint) -> libc::c_uint {
+pub fn primes(bound: u32) -> u32 {
     (0..bound + 1).filter(|&x| is_prime(x)).count() as u32
 }
 
-#[no_mangle]
-pub extern "C" fn primes_magic(bound: libc::c_uint) -> libc::c_uint {
+pub fn primes_magic(bound: u32) -> u32 {
     (0..bound + 1)
         .collect::<Vec<u32>>()
         .par_iter()
@@ -36,8 +31,7 @@ pub extern "C" fn primes_magic(bound: libc::c_uint) -> libc::c_uint {
         .count() as u32
 }
 
-#[no_mangle]
-pub extern "C" fn primes_multi(bound: libc::c_uint, nprocs: libc::c_uint) -> libc::c_uint {
+pub fn primes_multi(bound: u32, nprocs: u32) -> u32 {
     let (tx, rx) = channel();
     let handles: Vec<_> = (0..nprocs)
         .map(|i| {

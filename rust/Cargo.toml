@@ -1,32 +1,26 @@
 [package]
-name = "pythonkc"
+name = "rusty_primes"
 version = "0.1.0"
 authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
-build = "build.rs"
+build = false
+# build = "build.rs"
 
 [dependencies]
-clap = "*"
-env_logger = "*"
 libc = "*"
-log = "*"
 num_cpus = "*"
 rayon = "*"
+cpython = "*"
 time = "*"
 
 [build-dependencies]
-rusty-cheddar = "0.3.3"
+rusty-cheddar = "*"
 
 [lib]
-name = "pythonkc"
+name = "rusty_primes"
 path = "src/lib.rs"
 crate-type = ["cdylib", "lib"]
 
-[[bin]]
-name = "primes"
-path = "src/bin/primes.rs"
-doc = false
-
-[[bin]]
-name = "tmp"
-path = "src/bin/tmp.rs"
-doc = false
+# [[bin]]
+# name = "primes"
+# path = "src/bin/primes.rs"
+# doc = false
