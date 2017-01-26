@@ -1,6 +1,6 @@
 use cpython::{PyResult, Python};
 
-use primes::{primes, primes_magic, primes_multi};
+use core;
 
 py_module_initializer!(rusty_primes,
                        initrusty_primes,
@@ -16,13 +16,13 @@ py_module_initializer!(rusty_primes,
 });
 
 fn primes_py(_: Python, bound: u32) -> PyResult<u32> {
-    Ok(primes(bound))
+    Ok(core::primes(bound))
 }
 
 fn primes_magic_py(_: Python, bound: u32) -> PyResult<u32> {
-    Ok(primes_magic(bound))
+    Ok(core::primes_magic(bound))
 }
 
 fn primes_multi_py(_: Python, bound: u32, nprocs: u32) -> PyResult<u32> {
-    Ok(primes_multi(bound, nprocs))
+    Ok(core::primes_multi(bound, nprocs))
 }

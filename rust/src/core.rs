@@ -3,7 +3,7 @@ use std::thread;
 
 use rayon::prelude::*;
 
-fn is_prime(n: u32) -> bool {
+pub fn is_prime(n: u32) -> bool {
     if (n == 2) | (n == 3) {
         return true;
     } else if (n % 2 == 0) | (n < 2) {
@@ -59,7 +59,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_no_of_primes() {
+    fn test_primes() {
         assert_eq!(primes(0), 0);
         assert_eq!(primes(1), 0);
         assert_eq!(primes(2), 1);
@@ -67,7 +67,7 @@ mod tests {
     }
 
     #[test]
-    fn test_no_of_primes_magic() {
+    fn test_primes_magic() {
         assert_eq!(primes_magic(0), 0);
         assert_eq!(primes_magic(1), 0);
         assert_eq!(primes_magic(2), 1);
@@ -75,7 +75,7 @@ mod tests {
     }
 
     #[test]
-    fn test_no_of_primes_multi() {
+    fn test_primes_multi() {
         assert_eq!(primes_multi(0, 3), 0);
         assert_eq!(primes_multi(1, 3), 0);
         assert_eq!(primes_multi(2, 3), 1);

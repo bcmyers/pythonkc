@@ -10,11 +10,11 @@ extern crate cpython;
 extern crate libc;
 extern crate rayon;
 
-// mod ffi;
+pub mod core;
+pub mod ffi1;
 mod ffi2;
 pub mod general;
 mod objects;
-mod primes;
 
-// pub use ffi::*;
+pub use ffi1::*;
 pub use ffi2::*;

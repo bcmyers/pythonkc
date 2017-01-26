@@ -1,9 +1,9 @@
 import unittest
 
-from pythonkc.bin.pythonkc import parse_args, DEFAULT_BOUND, DEFAULT_NPROCS
+from pythonkc.utils import parse_args, DEFAULT_BOUND, DEFAULT_NPROCS
 
 
-class TestBin(unittest.TestCase):
+class TestUtils(unittest.TestCase):
 
     def test_parse_args_1(self):
         args = parse_args([])

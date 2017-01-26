@@ -8,7 +8,7 @@ const NAME: &'static str = "rusty_primes";
 fn main() {
     let header: String = cheddar::Cheddar::new()
         .expect("could not read manifest")
-        .module("ffi")
+        .module("ffi1")
         .expect("malformed module path")
         .compile_code()
         .expect("could not compile code");
@@ -18,6 +18,5 @@ fn main() {
         let mut file = fs::File::create(format!("target/{}/{}.h", mode, NAME))
             .expect("unable to create file");
         file.write_all(header.as_bytes()).expect("unable to write data");
-
     }
 }

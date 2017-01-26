@@ -1,13 +1,15 @@
-import sys
 import time
+import sys
+
+from rustypy import RustyModule
 
 from pythonkc import (
     primes,
     primes_magic,
     primes_multi,
+    Rust,
 )
-from pythonkc.util import parse_args
-import rusty_primes
+from pythonkc.utils import parse_args
 
 
 def main():
@@ -34,8 +36,11 @@ def main():
 
     print('\nRust called from Python:')
 
+    module = RustyModule('rusty_primes')
+    rust = Rust(module)
+
     t0 = time.time()
-    np = rusty_primes.primes(args.bound)
+    np = rust.primes(args.bound)
     t4 = time.time() - t0
     print((
         'Single process took {:.3f} seconds ({:.1f}x faster).'
@@ -43,7 +48,7 @@ def main():
     ))
 
     t0 = time.time()
-    np = rusty_primes.primes_magic(args.bound)
+    np = rust.primes_magic(args.bound)
     t5 = time.time() - t0
     print((
         "'Magic' multiprocessing took {:.3f} seconds ({:.1f}x faster)."
@@ -51,7 +56,7 @@ def main():
     ))
 
     t0 = time.time()
-    np = rusty_primes.primes_multi(args.bound, args.nprocs)
+    np = rust.primes_multi(args.bound, args.nprocs)
     t6 = time.time() - t0
     print((
         "'Manual' multiprocessing took {:.3f} seconds ({:.1f}x faster).\n"

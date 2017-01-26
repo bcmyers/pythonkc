@@ -1,6 +1,7 @@
 import os
 from pip.req import parse_requirements
 from setuptools import find_packages, setup
+from typing import List
 
 from rustypy import (
     build_rust,
@@ -12,14 +13,14 @@ from rustypy import (
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def long_description():
+def long_description() -> str:
     path = os.path.join(BASE_DIR, 'README.rst')
     with open(path, 'r') as f:
         long_description = f.read()
     return long_description
 
 
-def requirements():
+def requirements() -> List[str]:
     path = os.path.join(BASE_DIR, 'requirements', 'production.txt')
     return [str(r.req) for r in parse_requirements(path, session=False)]
 
@@ -38,9 +39,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'rust1 = pythonkc.bin.rust1:main',
-            'rust2 = pythonkc.bin.rust2:main',
-            'rustypy = pythonkc.bin.rustypy:main'
+            'primes1 = pythonkc.bin.primes1:main',
+            'primes2 = pythonkc.bin.primes2:main',
         ]
     },
     description='Template for calling Rust from Python',
@@ -55,6 +55,18 @@ setup(
     version='0.1.0',
 
     # rustypy
+    zip_safe=False,
+
+    # rustypy method 1
+    data_files=[(
+        'rusty_primes',
+        [
+            os.path.join('rust', 'target', 'release', 'rusty_primes.h'),
+            os.path.join('rust', 'target', 'release', 'librusty_primes.dylib'),
+        ]
+    )],
+
+    # rustypy method 1
     cmdclass={
         'build_rust': build_rust,
         'develop': develop_with_rust,
@@ -67,5 +79,4 @@ setup(
             ],
         }
     },
-    zip_safe=False,
 )

@@ -1,9 +1,7 @@
 __pycache__/
-.coverage
 .DS_Store
 *.egg-info
 *.so
 build/
-data/
 dist/
 target/

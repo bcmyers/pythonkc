@@ -2,8 +2,7 @@
 name = "rusty_primes"
 version = "0.1.0"
 authors = ["Brian Myers <brian.carl.myers@gmail.com>"]
-build = false
-# build = "build.rs"
+build = "build.rs"
 
 [dependencies]
 libc = "*"
@@ -20,7 +19,7 @@ name = "rusty_primes"
 path = "src/lib.rs"
 crate-type = ["cdylib", "lib"]
 
-# [[bin]]
-# name = "primes"
-# path = "src/bin/primes.rs"
-# doc = false
+[[bin]]
+name = "ownership_and_borrowing"
+path = "src/bin/ownership_and_borrowing.rs"
+doc = false
